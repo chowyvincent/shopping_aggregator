@@ -6,14 +6,14 @@ class BestBuy(scrapy.Spider):
 
     def parse(self, response):
         for item in response.css('div.list-item'):
-            url = item.css('div.sku-title a::attr(href)').extract_first()
+            image_url = item.css('div.thumb img::attr(src)').extract_first()
             name = item.css('div.sku-title a::text').extract_first()
             price_list = item.css('div.pb-hero-price.pb-purchase-price span::text').extract()
 
-            if url != "" and name != "" and len(price_list) != 0:
+            if image_url != "" and name != "" and len(price_list) != 0:
                 # Build JSON return output
                 yield {
-                    'item' : name,
-                    'item_url' : "https://bestbuy.com" + url,
+                    'itemName' : name,
+                    'imageUrl' : image_url,
                     'price' : ''.join(price_list)
                 }
